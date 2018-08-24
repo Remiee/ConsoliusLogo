@@ -1,132 +1,60 @@
 package consoliuslogo;
 
-public class Turtle {
-    private static final char TURTLE_UP = '\u25B2';
-    private static final char TURTLE_DOWN = '\u25BC';
-    private static final char TURTLE_RIGHT = '\u25B6';
-    private static final char TURTLE_LEFT = '\u25C0';
+import consoliuslogo.enums.Orientation;
+import consoliuslogo.enums.Direction;
 
+
+public class Turtle {
     private int y;
     private int x;
-    private int orientation;
-    private InputHandler inputHandler;
-    private Table table;
-    private char originalValue;
+    private Orientation orientation = Orientation.EAST;
 
 
-    public Turtle(int y, int x, InputHandler inputHandler, Table table) {
+    public Turtle(int y, int x) {
         this.y = y - 1;
         this.x = x - 1;
-        this.orientation = 90;
-        this.inputHandler = inputHandler;
-        this.table = table;
-        table.map[y - 1][x - 1] = TURTLE_RIGHT;
     }
 
-    public void moveTurtle(char direction) {
-        calculateOrientation(inputHandler.getRotate(), inputHandler.getDegree());
-
-        if ((direction == 'F' && orientation == 90) || (direction == 'B' && orientation == 270)) {
-            increaseX(x);
-        } else if ((direction == 'F' && orientation == 180) || (direction == 'B' && orientation == 0)) {
-            increaseY(y);
-        } else if ((direction == 'B' && orientation == 90) || (direction == 'F' && orientation == 270)) {
-            decreaseX(x);
-        } else if ((direction == 'B' && orientation == 180) || (direction == 'F' && orientation == 0)) {
-            decreaseY(y);
+    public void executeCommand(Command command, Table table) {
+        for (int i = 0; i < command.getRepeatCount(); ++i) {
+            moveTurtle(command, table);
         }
     }
 
-    private void calculateOrientation(char rotate, int degree) {
-        if (rotate == 'R') {
-            orientation += degree;
-        } else if (rotate == 'L') {
-            orientation -= degree;
-        }
+    private void moveTurtle(Command command, Table table) {
+        orientation = calculateOrientation(command.getRotateBy());
 
-        if (orientation % 360 < 0) {
-            orientation = 360 - Math.abs(orientation % 360);
-        } else {
-            orientation = orientation % 360;
+        int stepX = orientation.getStepX();
+        int stepY = orientation.getStepY();
+        if (command.getDirection() == Direction.BACKWARD) {
+            stepX = stepX * -1;
+            stepY = stepY * -1;
         }
+        table.paintLine(command.getDistance(), command.getIsDrawing(), stepX, stepY, x, y);
+
+        x += command.getDistance() * stepX;
+        y += command.getDistance() * stepY;
     }
 
-    private int calculateEndPosition(int coordinate, int size, int distance) {
-        int endPosition = coordinate + distance;
-        if (endPosition >= size) {
-            endPosition = size - 1;
+    private  Orientation calculateOrientation(int rotateBy) {
+
+        int degree = orientation.getDegree();
+        degree = (degree + rotateBy) % 360;
+        if (degree < 0) {
+            degree += 360;
         }
-        if (endPosition < 0) {
-            endPosition = 0;
-        }
-        return endPosition;
+        return Orientation.fromDegree(degree);
     }
 
-    private void increaseX(int coordinate) {
-        int endPosition = calculateEndPosition(x, table.getWidth(), inputHandler.getDistance());
-
-        for (int i = coordinate; i < endPosition; ++i) {
-            if (inputHandler.getIsDrawing()) {
-                table.map[y][i] = 'x';
-            } else if (i == coordinate && originalValue == 'x') {
-                table.map[y][i] = 'x';
-            } else if (i == coordinate) {
-                table.map[y][i] = '.';
-            }
-        }
-        x = endPosition;
-        originalValue = table.map[y][endPosition];
-        table.map[y][endPosition] = (orientation == 90) ? TURTLE_RIGHT : TURTLE_LEFT;
+    public int getY() {
+        return y;
     }
 
-    private void increaseY(int coordinate) {
-        int endPosition = calculateEndPosition(y, table.getHeight(), inputHandler.getDistance());
-
-        for (int i = coordinate; i < endPosition; ++i) {
-            if (inputHandler.getIsDrawing()) {
-                table.map[i][x] = 'x';
-            } else if (i == coordinate && originalValue == 'x') {
-                table.map[i][x] = 'x';
-            } else if (i == coordinate) {
-                table.map[i][x] = '.';
-            }
-        }
-        y = endPosition;
-        originalValue = table.map[endPosition][x];
-        table.map[endPosition][x] = (orientation == 180) ? TURTLE_DOWN : TURTLE_UP;
+    public int getX() {
+        return x;
     }
 
-    private void decreaseX(int coordinate) {
-        int endPosition = calculateEndPosition(x, table.getWidth(), -inputHandler.getDistance());
-
-        for (int i = coordinate; i > endPosition; --i) {
-            if (inputHandler.getIsDrawing()) {
-                table.map[y][i] = 'x';
-            } else if (i == coordinate && originalValue == 'x') {
-                table.map[y][i] = 'x';
-            } else if (i == coordinate) {
-                table.map[y][i] = '.';
-            }
-        }
-        x = endPosition;
-        originalValue = table.map[y][endPosition];
-        table.map[y][endPosition] = (orientation == 90) ? TURTLE_RIGHT : TURTLE_LEFT;
-    }
-
-    private void decreaseY(int coordinate) {
-        int endPosition = calculateEndPosition(y, table.getHeight(), -inputHandler.getDistance());
-
-        for (int i = coordinate; i > endPosition; --i) {
-            if (inputHandler.getIsDrawing()) {
-                table.map[i][x] = 'x';
-            } else if (i == coordinate && originalValue == 'x') {
-                table.map[i][x] = 'x';
-            } else if (i == coordinate) {
-                table.map[i][x] = '.';
-            }
-        }
-        y = endPosition;
-        originalValue = table.map[endPosition][x];
-        table.map[endPosition][x] = (orientation == 180) ? TURTLE_DOWN : TURTLE_UP;
+    public Orientation getOrientation() {
+        return orientation;
     }
 }
