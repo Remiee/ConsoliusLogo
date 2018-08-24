@@ -3,12 +3,10 @@ package consoliuslogo;
 import consoliuslogo.enums.Orientation;
 import consoliuslogo.enums.Direction;
 
-
 public class Turtle {
     private int y;
     private int x;
     private Orientation orientation = Orientation.EAST;
-
 
     public Turtle(int y, int x) {
         this.y = y - 1;

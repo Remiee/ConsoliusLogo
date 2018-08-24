@@ -1,7 +1,5 @@
 package consoliuslogo;
 
-import consoliuslogo.enums.Direction;
-
 public class Table {
     private final int height;
     private final int width;
@@ -15,14 +13,6 @@ public class Table {
         this.map = new char[height][width];
         this.originalValue = '.';
         initializeTable();
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
     }
 
     public void paintLine(int distance, boolean isDrawing, int stepX, int stepY, int x, int y) {
