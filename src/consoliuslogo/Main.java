@@ -1,5 +1,10 @@
 package consoliuslogo;
 
+import consoliuslogo.control.Command;
+import consoliuslogo.control.InputHandler;
+import consoliuslogo.game.Table;
+import consoliuslogo.game.Turtle;
+
 import java.util.Scanner;
 
 public class Main {
@@ -12,13 +17,7 @@ public class Main {
         while (true) {
             table.paintTurtle(turtle);
             table.printTable();
-            inputHandler.exit();
-            Command command = new Command(inputHandler.getRotate(),
-                                          inputHandler.getDegree(),
-                                          inputHandler.getDirection(),
-                                          inputHandler.getDistance(),
-                                          inputHandler.getIsDrawing(),
-                                         1);
+            Command command = inputHandler.parseCommand();
             turtle.executeCommand(command, table);
         }
     }

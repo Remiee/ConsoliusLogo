@@ -1,4 +1,4 @@
-package consoliuslogo.enums;
+package consoliuslogo.control;
 
 public enum Orientation {
     NORTH(0, '▲', 0, -1),

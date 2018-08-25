@@ -1,7 +1,7 @@
-package consoliuslogo;
+package consoliuslogo.game;
 
-import consoliuslogo.enums.Orientation;
-import consoliuslogo.enums.Direction;
+import consoliuslogo.control.Command;
+import consoliuslogo.control.Orientation;
 
 public class Turtle {
     private int y;
@@ -24,11 +24,12 @@ public class Turtle {
 
         int stepX = orientation.getStepX();
         int stepY = orientation.getStepY();
-        if (command.getDirection() == Direction.BACKWARD) {
+        if (command.getDistance() < 0) {
             stepX = stepX * -1;
             stepY = stepY * -1;
         }
-        table.paintLine(command.getDistance(), command.getIsDrawing(), stepX, stepY, x, y);
+
+        table.paintLine(Math.abs(command.getDistance()), command.isDrawing(), stepX, stepY, x, y);
 
         x += command.getDistance() * stepX;
         y += command.getDistance() * stepY;

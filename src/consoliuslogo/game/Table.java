@@ -1,11 +1,10 @@
-package consoliuslogo;
+package consoliuslogo.game;
 
 public class Table {
     private final int height;
     private final int width;
     public char[][] map;
     private char originalValue;
-
 
     public Table(int height, int width) {
         this.height = height;
@@ -16,7 +15,6 @@ public class Table {
     }
 
     public void paintLine(int distance, boolean isDrawing, int stepX, int stepY, int x, int y) {
-
         for (int i = 0; i < distance; ++i) {
             if (x >= 0 && x < width && y >= 0 && y < height) {
                 if (isDrawing) {
