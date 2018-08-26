@@ -31,8 +31,8 @@ public class Turtle {
 
         table.paintLine(Math.abs(command.getDistance()), command.isDrawing(), stepX, stepY, x, y);
 
-        x += command.getDistance() * stepX;
-        y += command.getDistance() * stepY;
+        x += Math.abs(command.getDistance()) * stepX;
+        y += Math.abs(command.getDistance()) * stepY;
     }
 
     private  Orientation calculateOrientation(int rotateBy) {

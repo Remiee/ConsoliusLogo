@@ -18,6 +18,10 @@ public class Main {
             table.paintTurtle(turtle);
             table.printTable();
             Command command = inputHandler.parseCommand();
+            if (inputHandler.isClearConsole()) {
+                table = new Table(20, 20);
+                turtle = new Turtle (10, 10);
+            }
             turtle.executeCommand(command, table);
         }
     }

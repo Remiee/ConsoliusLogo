@@ -4,18 +4,32 @@ import java.util.Scanner;
 
 public class InputHandler {
     private Scanner scanner;
+    private boolean clearConsole;
 
     public InputHandler(Scanner scanner) {
         this.scanner = scanner;
     }
 
+    public boolean isClearConsole() {
+        return clearConsole;
+    }
+
     public Command parseCommand() {
         System.out.println("Szia! Várom az utasításaidat!");
         String[] instructions = scanner.nextLine().split(" ");
-
+        clearConsole = clearConsole(instructions);
         int rotateBy = getValue(instructions,"R", "L");
         int distance = getValue(instructions,"F", "B");
         return new Command(rotateBy, distance, isDrawing(instructions), getRepeatCount(instructions));
+    }
+
+    private boolean clearConsole(String[] instructions) {
+        for (int i = 0; i < instructions.length; ++i) {
+            if (instructions[i].equals("C")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private int getValue(String[] instructions, String keyPositive, String keyNegative) {
