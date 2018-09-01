@@ -10,14 +10,15 @@ public class InputHandler {
         this.scanner = scanner;
     }
 
-    public boolean isClearConsole() {
+    public boolean shouldClearConsole() {
         return clearConsole;
     }
 
-    public Command parseCommand() {
-        System.out.println("Szia! Várom az utasításaidat!");
+    public Command getCommand() {
+        System.out.println("Hi. I'm waiting for your instructions!");
         String[] instructions = scanner.nextLine().split(" ");
         clearConsole = clearConsole(instructions);
+
         int rotateBy = getValue(instructions,"R", "L");
         int distance = getValue(instructions,"F", "B");
         return new Command(rotateBy, distance, isDrawing(instructions), getRepeatCount(instructions));
